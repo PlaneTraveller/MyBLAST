@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "whipworm.faa",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "whip",
+  "number-of-letters": 4186051,
+  "number-of-sequences": 9650,
+  "last-updated": "2023-03-26T21:23:00",
+  "number-of-volumes": 1,
+  "bytes-total": 5741732,
+  "bytes-to-cache": 4272998,
+  "files": [
+    "whipworm.faa.pdb",
+    "whipworm.faa.phr",
+    "whipworm.faa.pin",
+    "whipworm.faa.pot",
+    "whipworm.faa.psq",
+    "whipworm.faa.ptf",
+    "whipworm.faa.pto"
+  ]
+}
