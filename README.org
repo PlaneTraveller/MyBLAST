@@ -2,7 +2,7 @@
 #+author: Huayu Wang
 
 * Introduction
-This is my implementation of the original, gapless BLASTp algorithm in Python! I wrote this for a class project in \texttt{BME1205} at ShanghaiTech University, 2023, and it was a lot of fun. I hope you enjoy it as much as I did!
+This is my implementation of the original, gapless BLASTp algorithm in Python! I wrote this for a class project in ~BME1205~ at ShanghaiTech University, 2023, and it was a lot of fun. I hope you enjoy it as much as I did!
 
 * Usage
 ** Requirements
@@ -12,13 +12,32 @@ This is my implementation of the original, gapless BLASTp algorithm in Python! I
 
 * Todo List
 ** TODO Argparse
+- utilize the package ~argparse~
 ** TODO Parallelize the code
+- utilize the package ~multiprocessing~
+#+begin_src python
+from multiprocessing import Pool
+
+with Pool() as p:
+    result = pool.map(func, iterable)
+#+end_src
+- ~pool.map()~
+
 ** TODO Validity check
+The test results aren't exactly the same with the output of the official BLASTp + tool. More investigation is necessary to determine the validity of the results.
+
 ** TODO Local alignment algorithm
+Currently, the program only outputs the enties containing valid HSPs. The next step is to implement the local alignment algorithm to properly align the HSPs.
+
+The Smith-Waterman algorithm is a good choice for this task.
+
 ** TODO Result outputting
+- output the results with entry, aligned sequence, alignment score (a percentile)
+- format in json/csv
+
 ** TODO Documentation
 
 * References
 - [[https://github.com/JiaShun-Xiao/BLAST-bioinfor-tool][JiaShun-Xiao/BLAST-bioinfor-tool]]
 - [[https://en.wikipedia.org/wiki/BLAST_(biotechnology)][BLAST(biotechnology) - Wikipedia]]
-- Course slides for \texttt{BME1205} at ShanghaiTech University, 2023
+- Course slides for ~BME1205~ at ShanghaiTech University, 2023
