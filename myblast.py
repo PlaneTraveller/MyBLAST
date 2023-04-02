@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 
 #==============================================================================#
-# This is an implementation of BLASTp algorithm                                #
+# This is My implementation of BLASTp algorithm using BLOSUM62 matrix.
 #
 # For testing purposes, the database is the proteome of whipworm (Trichuris
 # trichiura) and the query is a protein from E. coli.
+#
+# TODO: Parallelize the code
+# TODO: Validity check
+# TODO: Argparse
+# TODO: Local alignment algorithm
+# TODO: Result outputting
 #==============================================================================#
 
 #==============================================================================#
@@ -32,6 +38,9 @@ qrFile = "query.fasta"
 resPath = workDir
 resFile = "results" + ".csv"
 
+#==============================================================================#
+# Parameters
+
 k = 3
 T = 13
 E = 0.001
@@ -44,9 +53,6 @@ hashedDB = {}
 with open(dbPath+dbFile, "r") as f:
     # Final dictionary: {kmer: [{entryID: [positions]}
     hashedDB = json.load(f)
-
-
-
 
 #==============================================================================#
 # Functions
@@ -206,4 +212,4 @@ if __name__ == "__main__":
 
 #==============================================================================#
 # Sample results
-# [{'CDW60865.1': [95, 121, 956.0], 'CDW57800.1': [493, 22, 57.0], 'CDW60670.1': [24, 55, 54.0]}, {'CDW60470.1': [115, 157, 648.0]}, {'CDW58513.1': [0, 0, 1992.0], 'CDW56129.1': [14, 218, 57.0], 'CDW60852.1': [39, 218, 56.0], 'CDW60899.1': [47, 218, 54.0], 'CDW57425.1': [18, 221, 54.0]}]
+# HSP = [{'CDW60865.1': [95, 121, 956.0], 'CDW57800.1': [493, 22, 57.0], 'CDW60670.1': [24, 55, 54.0]}, {'CDW60470.1': [115, 157, 648.0]}, {'CDW58513.1': [0, 0, 1992.0], 'CDW56129.1': [14, 218, 57.0], 'CDW60852.1': [39, 218, 56.0], 'CDW60899.1': [47, 218, 54.0], 'CDW57425.1': [18, 221, 54.0]}]

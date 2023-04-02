@@ -1,4 +1,24 @@
-#+title: Implementing BLAST in python
+#+title: PyBLASTp
+#+author: Huayu Wang
 
-* dump
--
+* Introduction
+This is my implementation of the original, gapless BLASTp algorithm in Python! I wrote this for a class project in \texttt{BME1205} at ShanghaiTech University, 2023, and it was a lot of fun. I hope you enjoy it as much as I did!
+
+* Usage
+** Requirements
+** Running the program
+*** Make BLAST database
+*** BLASTing
+
+* Todo List
+** TODO Argparse
+** TODO Parallelize the code
+** TODO Validity check
+** TODO Local alignment algorithm
+** TODO Result outputting
+** TODO Documentation
+
+* References
+- [[https://github.com/JiaShun-Xiao/BLAST-bioinfor-tool][JiaShun-Xiao/BLAST-bioinfor-tool]]
+- [[https://en.wikipedia.org/wiki/BLAST_(biotechnology)][BLAST(biotechnology) - Wikipedia]]
+- Course slides for \texttt{BME1205} at ShanghaiTech University, 2023
