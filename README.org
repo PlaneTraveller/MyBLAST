@@ -15,7 +15,7 @@ This is my implementation of the original, gapless BLASTp algorithm in Python! I
 ** Running the program
 *** Make BLAST database
 #+begin_src bash
-python mkdb -d "whipwork.faa"
+python mkdb -d "whipworm.faa"
 #+end_src
 
 For further command line options, use the ~-h~ flag.
@@ -38,7 +38,7 @@ options:
 
 *** BLASTing
 #+begin_src bash
-python myblast -d "whipwork.faa" -q "query.fasta" -t 15
+python myblast -d "whipworm.faa" -q "query.fasta" -t 15
 #+end_src
 
 For further command line options, use the ~-h~ flag.
@@ -75,7 +75,7 @@ options:
 - reduce redundence: 1m20s
 
 * Todo List
-** DONE Argparse
+** DONE /Argparse (DONE)/
 - utilize the package ~argparse~ to parse arguments from the command line
 
 ** TODO Parallelize the code

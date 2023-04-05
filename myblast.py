@@ -23,6 +23,7 @@ import math
 from multiprocessing import Pool
 from multiprocessing import Process
 import argparse
+import csv
 
 
 AA = ['C','S','T','A','G','P','D','E','Q','N','H','R','K','M','I','L','V','W','Y','F']
@@ -122,25 +123,6 @@ resFile = options.result
 
 subMat = bl.BLOSUM(options.submat)
 
-# k = 3
-# T = 13
-# E = 0.001
-
-# threads = 10
-
-# workDir = "./data/"
-
-# dbPath = workDir
-# dbFile = "whipworm" + "_db.json"
-
-# oriDBPath = workDir
-# oriDBFile = "whipworm" + ".faa"
-
-# qrPath = workDir
-# qrFile = "query.fasta"
-
-# resPath = workDir
-# resFile = "results" + ".csv"
 
 #==============================================================================#
 # File Reading
@@ -312,11 +294,17 @@ def main():
     with open(qrPath+qrFile, "r") as f:
         print("Reading query...")
         qr = SeqIO.parse(f, "fasta")
-        HSP = []
+        HSP = {}
 
         for record in qr:
             print(record.id)
-            HSP.append(blast(record))
+            HSP[record.id] = blast(record)
+
+        with open(resPath+resFile, "w") as f:
+            f.write("Query,Hit,MatchPos,SeedPos,Score\n")
+            for query in HSP:
+                for hit in HSP[query]:
+                    f.write(query + "," + hit + "," + ",".join(str(e) for e in HSP[query][hit])+ "\n")
 
         print(HSP)
 
