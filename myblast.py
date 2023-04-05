@@ -20,30 +20,127 @@ from Bio.Seq import Seq
 import json
 import blosum as bl
 import math
+from multiprocessing import Pool
+from multiprocessing import Process
+import argparse
 
-subMat = bl.BLOSUM(62)
+
 AA = ['C','S','T','A','G','P','D','E','Q','N','H','R','K','M','I','L','V','W','Y','F']
 
-workDir = "./data/"
+#==============================================================================#
+# Argument parsing
+def parseArgs():
+    parser = argparse.ArgumentParser(description="My implementation of BLASTp")
+    parser.add_argument(
+        "-k",
+        "--kmer",
+        type=int,
+        default=3,
+        help="Kmer length",
+    )
+    parser.add_argument(
+        "-T",
+        "--threshold",
+        type=int,
+        default=13,
+        help="Threshold for kmer",
+    )
+    parser.add_argument(
+        "-E",
+        "--expect",
+        type=float,
+        default=0.001,
+        help="Expectation value",
+    )
+    parser.add_argument(
+        "-t",
+        "--threads",
+        type=int,
+        default=1,
+        help="Number of threads",
+    )
+    parser.add_argument(
+        "-w",
+        "--workdir",
+        type=str,
+        default="./data/",
+        help="Working directory",
+    )
+    parser.add_argument(
+        "-d",
+        "--database",
+        type=str,
+        # default="whipworm",
+        help="Database file name",
+    )
+    parser.add_argument(
+        "-q",
+        "--query",
+        type=str,
+        # default="query.fasta",
+        help="Query file name",
+    )
+    parser.add_argument(
+        "-r",
+        "--result",
+        type=str,
+        default="results.csv",
+        help="Result file name",
+    )
+    parser.add_argument(
+        "-s",
+        "--submat",
+        type=int,
+        default=62,
+        help="Substitution matrix",
+    )
 
-dbPath = workDir
-dbFile = "whipworm" + "_db.json"
 
-oriDBPath = workDir
-oriDBFile = "whipworm" + ".faa"
+    return parser.parse_args()
 
-qrPath = workDir
-qrFile = "query.fasta"
-
-resPath = workDir
-resFile = "results" + ".csv"
 
 #==============================================================================#
 # Parameters
+options = parseArgs()
 
-k = 3
-T = 13
-E = 0.001
+k = options.kmer
+T = options.threshold
+E = options.expect
+threads = options.threads
+
+workDir = options.workdir
+
+dbPath = workDir
+dbFile = options.database.split(".")[0] + "_db.json"
+oriDBPath = workDir
+oriDBFile = options.database
+qrPath = workDir
+qrFile = options.query
+resPath = workDir
+resFile = options.result
+
+
+subMat = bl.BLOSUM(options.submat)
+
+# k = 3
+# T = 13
+# E = 0.001
+
+# threads = 10
+
+# workDir = "./data/"
+
+# dbPath = workDir
+# dbFile = "whipworm" + "_db.json"
+
+# oriDBPath = workDir
+# oriDBFile = "whipworm" + ".faa"
+
+# qrPath = workDir
+# qrFile = "query.fasta"
+
+# resPath = workDir
+# resFile = "results" + ".csv"
 
 #==============================================================================#
 # File Reading
@@ -120,17 +217,34 @@ def findHSP(seeds, querySeq, db, oriDB):
     # Final dictionary: {kmer: [positions]}
         if kmer in db:
             # Final dictionary: {kmer: {entryID: [positions]}
+            # Parellelization Handel
+
+            # procs = []
+            # for entry in db[kmer]:
+            #     proc = Process(target=mpWorker, args=(entry, HSP, kmer, oriDB, db, seeds, querySeq))
+            #     procs.append(proc)
+            #     proc.start()
+
+            # for proc in procs:
+            #     proc.join()
+
+            # with Pool(threads) as p:
+            #     p.map(mpWorker, db[kmer])
+
             for entry in db[kmer]:
-                for matchPos in db[kmer][entry]:
-                    dbEntry = str(oriDB[entry].seq)
-                    for seedPos in seeds[kmer]:
-                        hspScore = elongation(dbEntry, querySeq, matchPos, seedPos, subMat)
-                        if isSignificant(hspScore, len(dbEntry), len(querySeq)):
-                            if entry not in HSP:
-                                HSP[entry] = [matchPos, seedPos, hspScore]
-                                print("HSP found!")
+                mpWorker(entry, HSP, kmer, oriDB, db, seeds, querySeq)
     return HSP
 
+def mpWorker(entry, HSP, kmer, oriDB, db, seeds, querySeq):
+    if entry in HSP: return
+    for matchPos in db[kmer][entry]:
+        dbEntry = str(oriDB[entry].seq)
+        for seedPos in seeds[kmer]:
+            hspScore = elongation(dbEntry, querySeq, matchPos, seedPos, subMat)
+            if isSignificant(hspScore, len(dbEntry), len(querySeq)):
+                # if entry not in HSP:
+                HSP[entry] = [matchPos, seedPos, hspScore]
+                print("HSP found!")
 
 def isSignificant(hspScore, m, n):
     lam = 0.318

@@ -6,13 +6,78 @@ This is my implementation of the original, gapless BLASTp algorithm in Python! I
 
 * Usage
 ** Requirements
+- Python 3.10.10
+- ~argparse~
+- ~multiprocessing~
+- ~json~
+- ~Bio~
+
 ** Running the program
 *** Make BLAST database
+#+begin_src bash
+python mkdb -d "whipwork.faa"
+#+end_src
+
+For further command line options, use the ~-h~ flag.
+#+begin_src
+
+usage: mkdb.py [-h] [-k KMER] [-t THREADS] [-w WORKDIR] [-d DATABASE]
+
+My implementation of BLASTp database constructor
+
+options:
+  -h, --help            show this help message and exit
+  -k KMER, --kmer KMER  Kmer length
+  -t THREADS, --threads THREADS
+                        Number of threads
+  -w WORKDIR, --workdir WORKDIR
+                        Working directory
+  -d DATABASE, --database DATABASE
+                        Database file name
+#+end_src
+
 *** BLASTing
+#+begin_src bash
+python myblast -d "whipwork.faa" -q "query.fasta" -t 15
+#+end_src
+
+For further command line options, use the ~-h~ flag.
+#+begin_src
+usage: myblast.py [-h] [-k KMER] [-T THRESHOLD] [-E EXPECT] [-t THREADS]
+                  [-w WORKDIR] [-d DATABASE] [-q QUERY] [-r RESULT] [-s SUBMAT]
+
+My implementation of BLASTp
+
+options:
+  -h, --help            show this help message and exit
+  -k KMER, --kmer KMER  Kmer length
+  -T THRESHOLD, --threshold THRESHOLD
+                        Threshold for kmer
+  -E EXPECT, --expect EXPECT
+                        Expectation value
+  -t THREADS, --threads THREADS
+                        Number of threads
+  -w WORKDIR, --workdir WORKDIR
+                        Working directory
+  -d DATABASE, --database DATABASE
+                        Database file name
+  -q QUERY, --query QUERY
+                        Query file name
+  -r RESULT, --result RESULT
+                        Result file name
+  -s SUBMAT, --submat SUBMAT
+                        Substitution matrix
+#+end_src
+
+
+* Performance
+- initial commit: 1m23s
+- reduce redundence: 1m20s
 
 * Todo List
-** TODO Argparse
-- utilize the package ~argparse~
+** DONE Argparse
+- utilize the package ~argparse~ to parse arguments from the command line
+
 ** TODO Parallelize the code
 - utilize the package ~multiprocessing~
 #+begin_src python
@@ -22,6 +87,9 @@ with Pool() as p:
     result = pool.map(func, iterable)
 #+end_src
 - ~pool.map()~
+- but at what level?
+- maybe use ~jit~ for faster interpretation?
+- Optimize code performance: reduce redundent calls
 
 ** TODO Validity check
 The test results aren't exactly the same with the output of the official BLASTp + tool. More investigation is necessary to determine the validity of the results.
