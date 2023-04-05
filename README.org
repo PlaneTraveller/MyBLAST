@@ -99,7 +99,7 @@ Currently, the program only outputs the enties containing valid HSPs. The next s
 
 The Smith-Waterman algorithm is a good choice for this task.
 
-** TODO Result outputting
+** DONE /Result outputting (DONE)/
 - output the results with entry, aligned sequence, alignment score (a percentile)
 - format in json/csv
 
